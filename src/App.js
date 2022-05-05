@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import CodeEditor from '@uiw/react-textarea-code-editor';
+import React from "react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [code, setCode] = React.useState(
+        `int main(void) {\n  printf("Hello World!"); \n}`
+    );
+    const ws = new WebSocket("ws://localhost:8001");
+    function sendCode(code) {
+        ws.send(code);
+    }
+    return (
+        <div>
+            <CodeEditor
+                value={code}
+                language="c"
+                placeholder="Please enter C code."
+                onChange={(evn) => {
+                    setCode(evn.target.value);
+                    sendCode(evn.target.value);
+                }
+                }
+                padding={15}
+                style={{
+                    fontSize: 12,
+                    backgroundColor: "#f5f5f5",
+                    fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
+                }}
+            />
+        </div>
+    );
 }
 
 export default App;
