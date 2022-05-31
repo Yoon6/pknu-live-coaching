@@ -6,18 +6,16 @@ import "./tailwindcss.css";
 function Editor() {
 
     const context = useContext(UserContext);
-    const [code, setCode] = React.useState(
-        `#include <stdio.h> \n\nint main(void) {\n\tprintf("Hello World!"); \n}\n`
-    );
+    const [code, setCode] = React.useState("");
     const ws = new WebSocket("ws://210.110.136.112/ws");
-    ws.onopen = (e) => {
-        console.log("connected");
-        const user = {
-            id: context.username,
-            message: "#include <stdio.h> \n\nint main(void) {\n\tprintf(\"Hello World!\"); \n}\n"
-        };
-        ws.send(JSON.stringify(user));
-    }
+    // ws.onopen = (e) => {
+    //     console.log("connected");
+    //     const user = {
+    //         id: context.username,
+    //         message: "#include <stdio.h> \n\nint main(void) {\n\tprintf(\"Hello World!\"); \n}\n"
+    //     };
+    //     ws.send(JSON.stringify(user));
+    // }
 
     function sendCode(code) {
         const user = {
