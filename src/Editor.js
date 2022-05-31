@@ -20,7 +20,11 @@ function Editor() {
     }
 
     function sendCode(code) {
-        ws.send(code);
+        const user = {
+            id: context.username,
+            message: code
+        }
+        ws.send(JSON.stringify(user));
     }
 
     return (
