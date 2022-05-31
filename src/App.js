@@ -1,33 +1,19 @@
-import CodeEditor from '@uiw/react-textarea-code-editor';
 import React from "react";
+import {Route, Routes} from "react-router-dom";
+import Login from "./login";
+import Editor from "./Editor";
+import UserStore from "./UserStore";
 
 function App() {
-    const [code, setCode] = React.useState(
-        `int main(void) {\n  printf("Hello World!"); \n}`
-    );
-    const ws = new WebSocket("ws://localhost:8001");
-    function sendCode(code) {
-        ws.send(code);
-    }
     return (
-        <div>
-            <CodeEditor
-                value={code}
-                language="c"
-                placeholder="Please enter C code."
-                onChange={(evn) => {
-                    setCode(evn.target.value);
-                    sendCode(evn.target.value);
-                }
-                }
-                padding={15}
-                style={{
-                    fontSize: 12,
-                    backgroundColor: "#f5f5f5",
-                    fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
-                }}
-            />
-        </div>
+        <UserStore>
+            <div>
+                <Routes>
+                    <Route path="/" element={<Login/>}/>
+                    <Route path="/workspace" element={<Editor/>}/>
+                </Routes>
+            </div>
+        </UserStore>
     );
 }
 
