@@ -1,7 +1,7 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
 import Login from "./login";
-import App2 from "./App2";
+import Editor from "./Editor";
 import UserStore from "./UserStore";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<Login/>}/>
-                    <Route path="/workspace" element={<App2/>}/>
+                    <Route path="/workspace" element={<Editor/>}/>
                 </Routes>
             </div>
         </UserStore>
