@@ -1,6 +1,6 @@
 import React, {useContext, useState} from "react";
 import {User} from "./User";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {UserContext} from "./UserStore";
 import "./tailwindcss.css";
 
@@ -19,6 +19,7 @@ function Login() {
         context.setUsername(id);
         console.log(user);
     }
+    let navigate = useNavigate();
 
     return (
         <div>
@@ -48,12 +49,17 @@ function Login() {
                     m-auto
                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
                     "
-                onChange={onChange} value={id} placeholder="Username"/>
+                onChange={onChange} value={id} placeholder="Username"
+                onKeyPress={(e) => {onClick(); if(e.key==='Enter') navigate('/workspace');}}
+            />
             <div className="m-10"></div>
+
+            {/*라우터 페이지 이동 Link*/}
             <Link to="/workspace">
                 <button
                     className="py-2 px-4 block rounded-lg shadow-md text-white bg-blue-600 m-auto hover:bg-blue-800"
-                    onClick={onClick}>Login
+                    onClick={onClick}
+                >Login
                 </button>
             </Link>
         </div>
