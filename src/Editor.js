@@ -2,12 +2,20 @@ import CodeEditor from '@uiw/react-textarea-code-editor';
 import React, {useContext} from "react";
 import {UserContext} from "./UserStore";
 import "./tailwindcss.css";
+import axios from "axios";
 
+const getUserSrc = async (user) => {
+    return await axios.get(`http://210.110.136.112/users/srcfile?id=${user}`);
+}
 function Editor() {
 
     const context = useContext(UserContext);
     const [code, setCode] = React.useState("");
     const ws = new WebSocket("ws://210.110.136.112/ws");
+
+    getUserSrc(context.username).then(r => setCode(r.data.data));
+
+    // setCode(src);
     // ws.onopen = (e) => {
     //     console.log("connected");
     //     const user = {
