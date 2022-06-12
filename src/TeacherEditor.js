@@ -10,14 +10,20 @@ const getUserSrc = async (user) => {
 const compile = async (user) => {
     return await axios.get(`http://210.110.136.112/users/compile?id=${user}`);
 }
-function Editor() {
+const getUserList = async () => {
+    return await axios.get(`http://210.110.136.112/users/dir?id=`);
+}
+function TeacherEditor() {
 
     const context = useContext(UserContext);
     const [code, setCode] = React.useState("");
     const [result, setResult] = React.useState("");
+    const [users, setUsers] = React.useState([]);
     const ws = new WebSocket("ws://210.110.136.112/ws");
 
-    getUserSrc(context.username).then(r => setCode(r.data.data));
+    // getUserSrc(context.username).then(r => setCode(r.data.data));
+    // getUserList().then(r => setUsers(r.data.data.split("\n")));
+    // console.log(users);
 
     // setCode(src);
     // ws.onopen = (e) => {
@@ -100,4 +106,4 @@ function Editor() {
     );
 }
 
-export default Editor;
+export default TeacherEditor;
