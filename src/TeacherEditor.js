@@ -13,6 +13,7 @@ const compile = async (user) => {
 const getUserList = async () => {
     return await axios.get(`http://210.110.136.112/users/dir?id=`);
 }
+
 function TeacherEditor() {
 
     const context = useContext(UserContext);
@@ -20,20 +21,17 @@ function TeacherEditor() {
     const [result, setResult] = React.useState("");
     const [users, setUsers] = React.useState([]);
     const ws = new WebSocket("ws://210.110.136.112/ws");
+    const [selected, setSelected] = React.useState("");
 
-    // getUserSrc(context.username).then(r => setCode(r.data.data));
-    // getUserList().then(r => setUsers(r.data.data.split("\n")));
-    // console.log(users);
+    const tmp = async() => {
+        const array = await getUserList();
 
-    // setCode(src);
-    // ws.onopen = (e) => {
-    //     console.log("connected");
-    //     const user = {
-    //         id: context.username,
-    //         message: "#include <stdio.h> \n\nint main(void) {\n\tprintf(\"Hello World!\"); \n}\n"
-    //     };
-    //     ws.send(JSON.stringify(user));
-    // }
+        console.log(array);
+        setUsers(Object.values(array.data.data.split('\n')))
+    }
+    React.useEffect(()=> {
+        tmp();
+    },[])
 
     function sendCode(code) {
         const user = {
@@ -44,19 +42,30 @@ function TeacherEditor() {
     }
 
     function onClickCompile() {
-        compile(context.username).then(r => setResult(r.data.stdout));
+        compile(selected).then(r => setResult(r.data.stdout));
     }
 
+    const handleSelect = (e) => {
+        setSelected(e.target.value);
+        getUserSrc(e.target.value).then(r => setCode(r.data.data));
+    };
     return (
         <div>
             <header className="p-4 shadow-sm">
                 <div className="inline-block text-lg"><h1>PKNU LIVE COACHING</h1></div>
+                <select onChange={handleSelect} value={selected} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">>
+                    {users.map((item) => (
+                        <option value={item} key={item}>
+                            {item}
+                        </option>
+                    ))}
+                </select>
             </header>
             <div className="flex">
                 <div
                     className="flex-auto w-1/5 card m-2 cursor-pointer border border-gray-400 rounded-lg ">
                     <div className="m-3">
-                        <h2 className="text-lg mb-2 font-semibold">Current Dir : {context.username}/</h2>
+                        <h2 className="text-lg mb-2 font-semibold">Current Dir : {selected}/</h2>
                     </div>
                     <ul className="divide-y-2 divide-gray-400">
                         <li className="flex justify-between p-3 hover:bg-blue-600 hover:text-blue-200">
