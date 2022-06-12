@@ -3,6 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import Login from "./login";
 import Editor from "./Editor";
 import UserStore from "./UserStore";
+import TeacherEditor from "./TeacherEditor";
 
 function App() {
     return (
@@ -11,6 +12,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Login/>}/>
                     <Route path="/workspace" element={<Editor/>}/>
+                    <Route path="/teacher" element={<TeacherEditor/>}/>
                 </Routes>
             </div>
         </UserStore>
