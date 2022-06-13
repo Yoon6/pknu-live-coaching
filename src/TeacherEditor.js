@@ -25,8 +25,6 @@ function TeacherEditor() {
 
     const tmp = async() => {
         const array = await getUserList();
-
-        console.log(array);
         setUsers(Object.values(array.data.data.split('\n')))
     }
     React.useEffect(()=> {
@@ -34,8 +32,9 @@ function TeacherEditor() {
     },[])
 
     function sendCode(code) {
+        console.log("ws");
         const user = {
-            id: context.username,
+            id: selected,
             message: code
         }
         ws.send(JSON.stringify(user));
@@ -43,12 +42,15 @@ function TeacherEditor() {
 
     function onClickCompile() {
         compile(selected).then(r => setResult(r.data.stdout));
+        getUserSrc(selected).then(r => setCode(r.data.data)); // 임시 동기화
+
     }
 
     const handleSelect = (e) => {
         setSelected(e.target.value);
         getUserSrc(e.target.value).then(r => setCode(r.data.data));
     };
+
     return (
         <div>
             <header className="p-4 shadow-sm">

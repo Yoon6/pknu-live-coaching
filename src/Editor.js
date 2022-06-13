@@ -1,5 +1,5 @@
 import CodeEditor from '@uiw/react-textarea-code-editor';
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {UserContext} from "./UserStore";
 import "./tailwindcss.css";
 import axios from "axios";
@@ -15,30 +15,30 @@ function Editor() {
     const context = useContext(UserContext);
     const [code, setCode] = React.useState("");
     const [result, setResult] = React.useState("");
+    const [username, setUsername] = React.useState(context.username);
     const ws = new WebSocket("ws://210.110.136.112/ws");
 
-    getUserSrc(context.username).then(r => setCode(r.data.data));
 
-    // setCode(src);
-    // ws.onopen = (e) => {
-    //     console.log("connected");
-    //     const user = {
-    //         id: context.username,
-    //         message: "#include <stdio.h> \n\nint main(void) {\n\tprintf(\"Hello World!\"); \n}\n"
-    //     };
-    //     ws.send(JSON.stringify(user));
-    // }
+    if (username === '') {
+        setUsername(localStorage.getItem('user'));
+    }
+
+    getUserSrc(username).then(r => setCode(r.data.data));
+
+    useEffect(() => {
+        localStorage.setItem('user', username);
+    },[]);
 
     function sendCode(code) {
         const user = {
-            id: context.username,
+            id: username,
             message: code
         }
         ws.send(JSON.stringify(user));
     }
 
     function onClickCompile() {
-        compile(context.username).then(r => setResult(r.data.stdout));
+        compile(username).then(r => setResult(r.data.stdout));
     }
 
     return (
@@ -50,7 +50,7 @@ function Editor() {
                 <div
                     className="flex-auto w-1/5 card m-2 cursor-pointer border border-gray-400 rounded-lg ">
                     <div className="m-3">
-                        <h2 className="text-lg mb-2 font-semibold">Current Dir : {context.username}/</h2>
+                        <h2 className="text-lg mb-2 font-semibold">Current Dir : {username}/</h2>
                     </div>
                     <ul className="divide-y-2 divide-gray-400">
                         <li className="flex justify-between p-3 hover:bg-blue-600 hover:text-blue-200">

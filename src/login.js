@@ -19,7 +19,6 @@ function Login() {
     const onClick = () => {
         let user = new User(id, '');
         context.setUsername(id);
-        console.log(user);
     }
     let navigate = useNavigate();
 
