@@ -1,8 +1,11 @@
 import React, {useContext, useState} from "react";
 import {User} from "./User";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {UserContext} from "./UserStore";
 import "./tailwindcss.css";
+import axios from "axios";
+
+
 
 function Login() {
 
@@ -15,12 +18,32 @@ function Login() {
     const onChange = (e) => {
         setId(e.target.value);
     }
+    
+
 
     const onClick = () => {
-        let user = new User(id, '');
-        context.setUsername(id);
+        //let user = new User(id, '');
+        //context.setUsername(id);
+        async function loginuser(){
+            const options = {
+                method: 'POST',
+                url: 'http://localhost:8002/users/login',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: {
+                    id
+                }
+            }
+            const response = await axios(options)
+            if(response.user){
+                localStorage.setItem('token', response.user)
+                window.location.href = '/dashboard'
+            }else{
+                console.log('invalid username')
+            }
+        }
     }
-    let navigate = useNavigate();
 
     return (
         <div>
@@ -51,16 +74,17 @@ function Login() {
                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
                     "
                 onChange={onChange} value={id} placeholder="Username"
-                onKeyPress={(e) => {onClick(); if(e.key==='Enter') navigate('/workspace');}}
             />
             <div className="m-10"></div>
-
-            {/*라우터 페이지 이동 Link*/}
-            <Link to="/workspace">
+            <button
+                className="py-2 px-4 block rounded-lg shadow-md text-white bg-blue-600 m-auto hover:bg-blue-800"
+                onClick={onClick}
+            >Login
+            </button>
+            <Link to="/register">
                 <button
                     className="py-2 px-4 block rounded-lg shadow-md text-white bg-blue-600 m-auto hover:bg-blue-800"
-                    onClick={onClick}
-                >Login
+                >Register
                 </button>
             </Link>
         </div>

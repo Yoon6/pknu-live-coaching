@@ -5,7 +5,7 @@ import "./tailwindcss.css";
 import axios from "axios";
 
 const getUserSrc = async (user) => {
-    return await axios.get(`http://210.110.136.112/users/srcfile?id=${user}`);
+    return await axios.get(`http://localhost:8002/users/srcfile?id=${user}`);
 }
 const compile = async (user) => {
     return await axios.get(`http://210.110.136.112/users/compile?id=${user}`);
@@ -17,10 +17,11 @@ function Editor() {
     const [result, setResult] = React.useState("");
     const [username, setUsername] = React.useState(context.username);
     const ws = new WebSocket("ws://210.110.136.112/ws");
+    const token = localStorage.getItem('token')
 
 
     if (username === '') {
-        setUsername(localStorage.getItem('user'));
+        setUsername(token.username);
     }
 
     getUserSrc(username).then(r => setCode(r.data.data));
@@ -59,15 +60,6 @@ function Editor() {
                                  stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                            </svg>
-                        </li>
-                        <li className="flex justify-between p-3 hover:bg-blue-600 hover:text-blue-200">
-                            New File
-                            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-blue-600" fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
                         </li>
                         <li className="flex items-center justify-between p-3 hover:bg-blue-600 hover:text-blue-200">
