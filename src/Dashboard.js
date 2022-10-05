@@ -3,7 +3,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import {useNavigate} from 'react-router-dom'
 import styled from 'styled-components';
-import jwt from 'jsonwebtoken'
+//import jwt from 'jsonwebtoken'
 
 import "./tailwindcss.css";
 
@@ -30,19 +30,19 @@ const Dashboard = () => {
         
     }
 
-    useEffect(()=>{
-        const token = localStorage.getItem('token')
-        if(token){
-            const user = jwt.decode(token)
-            if(!user){
-                localStorage.removeItem('token')
-                navigate('/login')
-            } else {
-                // get projects from server
-                fetchprojects()
-            }
-        }
-    })
+    // useEffect(()=>{
+    //     const token = localStorage.getItem('token')
+    //     if(token){
+    //         const user = jwt.decode(token)
+    //         if(!user){
+    //             localStorage.removeItem('token')
+    //             navigate('/login')
+    //         } else {
+    //             // get projects from server
+    //             fetchprojects()
+    //         }
+    //     }
+    // })
     const onclick = async ()=>{
         //create new project
         try {
